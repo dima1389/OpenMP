@@ -1,138 +1,91 @@
 /*
- * Toolchain and runtime DLL consistency notice (Windows / MinGW-w64):
+ * OpenMP barrier demonstration.
  *
- * This example uses GCC with OpenMP support under MSYS2 (MinGW-w64).
- * On Windows, the compiler front-end (cc1plus.exe) dynamically loads
- * runtime libraries (e.g. zlib1.dll) from directories listed in PATH.
- * If multiple MSYS2 environments (mingw64, ucrt64) or other toolchains
- * (Git, Anaconda, Cygwin) are present on PATH, an incompatible zlib1.dll
- * may be loaded at runtime, resulting in errors such as:
- *
- *   "cc1plus.exe – Entry Point Not Found: crc32_combine"
- *
- * To avoid DLL mismatches, ensure that a single MinGW-w64 environment
- * is used and that its bin directory appears first in PATH.
+ * Toolchain and runtime DLL consistency notice (Windows / MSYS2 MinGW-w64):
+ *   If you have multiple MSYS2 environments installed (e.g., mingw64 vs ucrt64),
+ *   ensure the intended toolchain's bin directory comes first in PATH. Otherwise,
+ *   the program (or compiler helper executables) may load incompatible DLLs at
+ *   runtime (a common symptom is an entry-point error involving zlib1.dll).
  *
  * Recommended environment alignment:
  *   set "PATH=C:\msys64\mingw64\bin;%PATH%"
  *
  * Compilation:
- *   gcc -fopenmp -Wall OMP_Barrier.c -o OMP_Barrier.exe
+ *   gcc -fopenmp -Wall OMP_Barrier.c -o OMP_Barrier
  *
  * Execution:
- *   OMP_Barrier.exe
- *
- * Notes:
- * - Do not mix mingw64 and ucrt64 toolchains in the same CMD session.
- * - Prefer the MSYS2 “MinGW x64” shell for a preconfigured environment.
+ *   OMP_Barrier
  */
 
-/*
- * Standard C header providing input/output functions.
- * In this example, printf() is used to print text to the console.
- */
-#include <stdio.h>
+#include <stdio.h>  /* printf, fflush */
+#include <omp.h>    /* OpenMP runtime API */
 
 /*
- * OpenMP header file.
+ * This example demonstrates what an OpenMP barrier guarantees:
+ *   - Synchronization: all threads in the team must reach the barrier
+ *     before any thread is allowed to proceed beyond it.
+ *   - Ordering (program-order around the barrier): code after the barrier
+ *     cannot execute on any thread until every thread has completed the
+ *     code before the barrier.
  *
- * This header makes all OpenMP runtime functions and constructs
- * available to the program, including:
- *   - omp_get_thread_num()
- *   - synchronization constructs such as barriers
+ * Important practical note:
+ *   Console output is a shared I/O side-effect and may be buffered. To make
+ *   the observed output reliably reflect the barrier ordering, printing is
+ *   serialized using an OpenMP 'critical' section.
  */
-#include <omp.h>
-
-/*
- * Program entry point.
- *
- * argc and argv represent command-line arguments,
- * but they are not used in this example.
- */
-int main(int argc, char *argv[])
+int main(void)
 {
-    /*
-     * OPENMP PARALLEL REGION
-     *
-     * This directive creates a team of threads.
-     * Each thread executes the code inside the block { } independently.
-     *
-     * All threads start executing the code in this block at (almost)
-     * the same time.
-     */
-#pragma omp parallel
+    printf("OpenMP reports %d processors\n", omp_get_num_procs());
+    printf("Max threads (runtime limit): %d\n\n", omp_get_max_threads());
+
+    #pragma omp parallel
     {
-        /*
-         * FIRST PRINTF STATEMENT (BEFORE BARRIER)
+        int tid = omp_get_thread_num();
+        int nthreads = omp_get_num_threads();
+
+        /* Phase 1: executed by each thread before the barrier.
          *
-         * Each thread executes this printf() as soon as it enters
-         * the parallel region.
-         *
-         * Because there is NO synchronization before this point:
-         *   - Threads may reach this printf() at different times
-         *   - Output order is NOT deterministic
-         *
-         * omp_get_thread_num() returns:
-         *   - The ID of the current thread (0, 1, 2, ...)
+         * #pragma omp critical is necessary here because:
+         * 1. printf() is not thread-safe - multiple threads calling it simultaneously
+         *    can interleave their output, producing garbled/mixed messages
+         * 2. Without critical section, output like "Phase 1 thread 0" and "Phase 1 thread 1"
+         *    could print as "Phase 1 Phase 1 thread thread 0 1"
+         * 3. The critical directive ensures only one thread at a time executes this block,
+         *    guaranteeing each message prints completely before the next thread's message
+         * 4. fflush(stdout) ensures the output is immediately written, preventing buffering
+         *    issues that could delay or reorder messages even within the critical section
          */
-        printf(
-            "Printf 1 of %d thread\n",
-            omp_get_thread_num()
-        );
+        #pragma omp critical
+        {
+            printf("Phase 1 (before barrier): thread %d of %d\n", tid, nthreads);
+            fflush(stdout);
+        }
 
         /*
-         * OPENMP BARRIER
-         *
-         * #pragma omp barrier
-         *
-         * A barrier is a synchronization point.
-         *
-         * What it means:
-         *   - Every thread MUST reach this line
-         *   - No thread is allowed to continue past this point
-         *     until ALL threads have arrived here
-         *
-         * If one thread reaches the barrier early:
-         *   - It waits (is blocked)
-         *
-         * If another thread is slow:
-         *   - All other threads wait for it
-         *
-         * Only when the LAST thread arrives at the barrier
-         * are all threads released to continue execution.
+         * BARRIER:
+         *   No thread can execute Phase 2 until ALL threads have printed Phase 1
+         *   (i.e., reached this point in the program).
          */
-#pragma omp barrier
+        #pragma omp barrier
+
+        /* Phase 2: executed by each thread after the barrier. */
+        #pragma omp critical
+        {
+            printf("Phase 2 (after barrier):  thread %d of %d\n", tid, nthreads);
+            fflush(stdout);
+        }
 
         /*
-         * SECOND PRINTF STATEMENT (AFTER BARRIER)
-         *
-         * This printf() is executed only AFTER:
-         *   - All threads have completed "Printf 1"
-         *   - All threads have reached the barrier
-         *
-         * Important:
-         *   - The order of "Printf 2" lines is still not guaranteed
-         *   - But NONE of them can appear before ALL "Printf 1" lines
-         *
-         * This demonstrates how a barrier enforces a global
-         * synchronization point among threads.
+         * Even with the barrier, the relative ordering *within* each phase
+         * (which thread prints first) remains nondeterministic and depends on
+         * the runtime scheduler and OS timing.
          */
-        printf(
-            "Printf 2 of %d thread\n",
-            omp_get_thread_num()
-        );
     }
 
     /*
-     * End of the parallel region.
-     *
-     * There is an implicit barrier here:
-     *   - All threads synchronize
-     *   - Only the original (master) thread continues execution
-     */
-
-    /*
-     * Return 0 to indicate successful program termination.
+     * End of parallel region:
+     *   All threads in the team join (implicit barrier).
+     *   Execution continues with the encountering thread (here: the initial thread).
      */
     return 0;
 }
