@@ -6,3 +6,5 @@
 | Intermediate | `omp_atomic_vs_critical.c` | cost and semantics        |
 | Advanced     | `omp_tasks_intro.c`        | task parallelism          |
 | Advanced     | `omp_false_sharing.c`      | cache effects             |
+
+Provide omp_false_sharing.c program in suggested project style.
