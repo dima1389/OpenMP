@@ -45,15 +45,9 @@ int main(void)
 
         /* Phase 1: executed by each thread before the barrier.
          *
-         * #pragma omp critical is necessary here because:
-         * 1. printf() is not thread-safe - multiple threads calling it simultaneously
-         *    can interleave their output, producing garbled/mixed messages
-         * 2. Without critical section, output like "Phase 1 thread 0" and "Phase 1 thread 1"
-         *    could print as "Phase 1 Phase 1 thread thread 0 1"
-         * 3. The critical directive ensures only one thread at a time executes this block,
-         *    guaranteeing each message prints completely before the next thread's message
-         * 4. fflush(stdout) ensures the output is immediately written, preventing buffering
-         *    issues that could delay or reorder messages even within the critical section
+         * #pragma omp critical ensures thread-safe output:
+         * - Prevents interleaved printf() calls (e.g., "Phase Phase 1 1 thread thread 0 1")
+         * - fflush(stdout) forces immediate output
          */
         #pragma omp critical
         {
