@@ -1,4 +1,6 @@
 OMP_Sieve_Schedule/primes.txt
+/build/
+/build-ninja/
 
 # Prerequisites
 *.d

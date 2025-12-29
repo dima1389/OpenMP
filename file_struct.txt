@@ -34,3 +34,9 @@ openmp-guide/
     build_msys2.cmd
   .github/workflows/
     ci.yml              (optional: build + run smoke tests)
+
+cmake -S . -B build
+cmake --build build
+
+cmake -S . -B build-ninja -G Ninja
+cmake --build build-ninja
