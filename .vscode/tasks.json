@@ -1,0 +1,206 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+
+    /* =======================
+       01 — BASICS
+       ======================= */
+
+    {
+      "label": "Run: omp_data_sharing",
+      "type": "shell",
+      "command": "${workspaceFolder}\\bin\\01_basics\\omp_data_sharing.exe",
+      "group": "test",
+      "problemMatcher": []
+    },
+    {
+      "label": "Run: omp_hello",
+      "type": "shell",
+      "command": "${workspaceFolder}\\bin\\01_basics\\omp_hello.exe",
+      "group": "test",
+      "problemMatcher": []
+    },
+    {
+      "label": "Run: omp_parallel_for",
+      "type": "shell",
+      "command": "${workspaceFolder}\\bin\\01_basics\\omp_parallel_for.exe ${input:parallelForN}",
+      "group": "test",
+      "problemMatcher": []
+    },
+    {
+      "label": "Run: omp_reduction",
+      "type": "shell",
+      "command": "${workspaceFolder}\\bin\\01_basics\\omp_reduction.exe ${input:reductionN}",
+      "group": "test",
+      "problemMatcher": []
+    },
+    {
+      "label": "Run: omp_reduction_fp",
+      "type": "shell",
+      "command": "${workspaceFolder}\\bin\\01_basics\\omp_reduction_fp.exe ${input:reductionFpN}",
+      "group": "test",
+      "problemMatcher": []
+    },
+
+    /* =======================
+       02 — SYNCHRONIZATION
+       ======================= */
+
+    {
+      "label": "Run: omp_atomic_vs_critical",
+      "type": "shell",
+      "command": "${workspaceFolder}\\bin\\02_synchronization\\omp_atomic_vs_critical.exe ${input:atomicN}",
+      "group": "test",
+      "problemMatcher": []
+    },
+    {
+      "label": "Run: omp_barrier",
+      "type": "shell",
+      "command": "${workspaceFolder}\\bin\\02_synchronization\\omp_barrier.exe",
+      "group": "test",
+      "problemMatcher": []
+    },
+    {
+      "label": "Run: omp_printf_interleaving",
+      "type": "shell",
+      "command": "${workspaceFolder}\\bin\\02_synchronization\\omp_printf_interleaving.exe",
+      "group": "test",
+      "problemMatcher": []
+    },
+
+    /* =======================
+       03 — SCHEDULING
+       ======================= */
+
+    {
+      "label": "Run: omp_schedule_demo",
+      "type": "shell",
+      "command": "${workspaceFolder}\\bin\\03_scheduling\\omp_schedule_demo.exe ${input:schedN} ${input:schedPattern}",
+      "group": "test",
+      "problemMatcher": []
+    },
+    {
+      "label": "Run: omp_schedule_demo_chunks",
+      "type": "shell",
+      "command": "${workspaceFolder}\\bin\\03_scheduling\\omp_schedule_demo_chunks.exe ${input:schedN} ${input:schedPattern} ${input:schedChunk}",
+      "group": "test",
+      "problemMatcher": []
+    },
+    {
+      "label": "Run: omp_schedule_profile",
+      "type": "shell",
+      "command": "${workspaceFolder}\\bin\\03_scheduling\\omp_schedule_profile.exe ${input:profileN} ${input:schedPattern} ${input:schedChunk}",
+      "group": "test",
+      "problemMatcher": []
+    },
+    {
+      "label": "Run: omp_schedule_profile_used_threads",
+      "type": "shell",
+      "command": "${workspaceFolder}\\bin\\03_scheduling\\omp_schedule_profile_used_threads.exe ${input:profileN} ${input:schedPattern} ${input:schedChunk}",
+      "group": "test",
+      "problemMatcher": []
+    },
+
+    /* =======================
+       04 — PERFORMANCE
+       ======================= */
+
+    {
+      "label": "Run: omp_false_sharing",
+      "type": "shell",
+      "command": "${workspaceFolder}\\bin\\04_performance\\omp_false_sharing.exe ${input:falseIters} ${input:falseReps}",
+      "group": "test",
+      "problemMatcher": []
+    },
+    {
+      "label": "Run: omp_false_sharing_array",
+      "type": "shell",
+      "command": "${workspaceFolder}\\bin\\04_performance\\omp_false_sharing_array.exe ${input:falseElements} ${input:falseIters} ${input:falseReps}",
+      "group": "test",
+      "problemMatcher": []
+    },
+    {
+      "label": "Run: omp_timing",
+      "type": "shell",
+      "command": "${workspaceFolder}\\bin\\04_performance\\omp_timing.exe ${input:timingN} ${input:timingPattern}",
+      "group": "test",
+      "problemMatcher": []
+    },
+    {
+      "label": "Run: omp_timing_reduce_max",
+      "type": "shell",
+      "command": "${workspaceFolder}\\bin\\04_performance\\omp_timing_reduce_max.exe ${input:timingN}",
+      "group": "test",
+      "problemMatcher": []
+    },
+
+    /* =======================
+       05 — ADVANCED
+       ======================= */
+
+    {
+      "label": "Run: omp_simd_intro",
+      "type": "shell",
+      "command": "${workspaceFolder}\\bin\\05_advanced\\omp_simd_intro.exe ${input:simdN} ${input:simdReps}",
+      "group": "test",
+      "problemMatcher": []
+    },
+    {
+      "label": "Run: omp_tasks_intro",
+      "type": "shell",
+      "command": "${workspaceFolder}\\bin\\05_advanced\\omp_tasks_intro.exe ${input:taskN} ${input:taskCutoff}",
+      "group": "test",
+      "problemMatcher": []
+    },
+    {
+      "label": "Run: omp_tasks_depend",
+      "type": "shell",
+      "command": "${workspaceFolder}\\bin\\05_advanced\\omp_tasks_depend.exe ${input:taskItems}",
+      "group": "test",
+      "problemMatcher": []
+    },
+    {
+      "label": "Run: omp_tasks_pipeline_overlap",
+      "type": "shell",
+      "command": "${workspaceFolder}\\bin\\05_advanced\\omp_tasks_pipeline_overlap.exe ${input:taskItems} ${input:taskVerbosity}",
+      "group": "test",
+      "problemMatcher": []
+    },
+    {
+      "label": "Run: omp_tasks_pipeline_gantt",
+      "type": "shell",
+      "command": "${workspaceFolder}\\bin\\05_advanced\\omp_tasks_pipeline_gantt.exe ${input:taskItems} ${input:ganttWidth} ${input:ganttEvents}",
+      "group": "test",
+      "problemMatcher": []
+    }
+  ],
+
+  "inputs": [
+    { "id": "parallelForN", "type": "promptString", "default": "100000000" },
+    { "id": "reductionN", "type": "promptString", "default": "100000000" },
+    { "id": "reductionFpN", "type": "promptString", "default": "100000000" },
+    { "id": "atomicN", "type": "promptString", "default": "200000000" },
+
+    { "id": "schedN", "type": "promptString", "default": "50000000" },
+    { "id": "profileN", "type": "promptString", "default": "20000000" },
+    { "id": "schedPattern", "type": "promptString", "default": "1" },
+    { "id": "schedChunk", "type": "promptString", "default": "1" },
+
+    { "id": "falseElements", "type": "promptString", "default": "1024" },
+    { "id": "falseIters", "type": "promptString", "default": "200000000" },
+    { "id": "falseReps", "type": "promptString", "default": "5" },
+
+    { "id": "timingN", "type": "promptString", "default": "80000000" },
+    { "id": "timingPattern", "type": "promptString", "default": "1" },
+
+    { "id": "simdN", "type": "promptString", "default": "50000000" },
+    { "id": "simdReps", "type": "promptString", "default": "5" },
+
+    { "id": "taskN", "type": "promptString", "default": "40" },
+    { "id": "taskCutoff", "type": "promptString", "default": "20" },
+    { "id": "taskItems", "type": "promptString", "default": "8" },
+    { "id": "taskVerbosity", "type": "promptString", "default": "1" },
+    { "id": "ganttWidth", "type": "promptString", "default": "80" },
+    { "id": "ganttEvents", "type": "promptString", "default": "0" }
+  ]
+}
