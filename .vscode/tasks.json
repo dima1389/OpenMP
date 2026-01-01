@@ -176,31 +176,136 @@
   ],
 
   "inputs": [
-    { "id": "parallelForN", "type": "promptString", "default": "100000000" },
-    { "id": "reductionN", "type": "promptString", "default": "100000000" },
-    { "id": "reductionFpN", "type": "promptString", "default": "100000000" },
-    { "id": "atomicN", "type": "promptString", "default": "200000000" },
+    {
+      "id": "parallelForN",
+      "type": "promptString",
+      "description": "Upper bound N for omp_parallel_for",
+      "default": "100000000"
+    },
+    {
+      "id": "reductionN",
+      "type": "promptString",
+      "description": "Number of terms N for omp_reduction",
+      "default": "100000000"
+    },
+    {
+      "id": "reductionFpN",
+      "type": "promptString",
+      "description": "Number of terms N for omp_reduction_fp (harmonic series)",
+      "default": "100000000"
+    },
+    {
+      "id": "atomicN",
+      "type": "promptString",
+      "description": "Total number of increments for omp_atomic_vs_critical",
+      "default": "200000000"
+    },
 
-    { "id": "schedN", "type": "promptString", "default": "50000000" },
-    { "id": "profileN", "type": "promptString", "default": "20000000" },
-    { "id": "schedPattern", "type": "promptString", "default": "1" },
-    { "id": "schedChunk", "type": "promptString", "default": "1" },
+    {
+      "id": "schedN",
+      "type": "promptString",
+      "description": "Number of loop iterations (scheduling demos)",
+      "default": "50000000"
+    },
+    {
+      "id": "profileN",
+      "type": "promptString",
+      "description": "Number of loop iterations (scheduling profiling)",
+      "default": "20000000"
+    },
+    {
+      "id": "schedPattern",
+      "type": "promptString",
+      "description": "Workload pattern (1=heavy-end, 2=heavy-start, 3=periodic)",
+      "default": "1"
+    },
+    {
+      "id": "schedChunk",
+      "type": "promptString",
+      "description": "Chunk size for static/dynamic/guided scheduling",
+      "default": "1"
+    },
 
-    { "id": "falseElements", "type": "promptString", "default": "1024" },
-    { "id": "falseIters", "type": "promptString", "default": "200000000" },
-    { "id": "falseReps", "type": "promptString", "default": "5" },
+    {
+      "id": "falseElements",
+      "type": "promptString",
+      "description": "Number of logical elements per thread (false sharing array)",
+      "default": "1024"
+    },
+    {
+      "id": "falseIters",
+      "type": "promptString",
+      "description": "Number of increments per thread",
+      "default": "200000000"
+    },
+    {
+      "id": "falseReps",
+      "type": "promptString",
+      "description": "Number of repetitions for false sharing benchmarks",
+      "default": "5"
+    },
 
-    { "id": "timingN", "type": "promptString", "default": "80000000" },
-    { "id": "timingPattern", "type": "promptString", "default": "1" },
+    {
+      "id": "timingN",
+      "type": "promptString",
+      "description": "Number of loop iterations for timing benchmarks",
+      "default": "80000000"
+    },
+    {
+      "id": "timingPattern",
+      "type": "promptString",
+      "description": "Timing workload pattern (1=uniform, 2=increasing, 3=periodic)",
+      "default": "1"
+    },
 
-    { "id": "simdN", "type": "promptString", "default": "50000000" },
-    { "id": "simdReps", "type": "promptString", "default": "5" },
+    {
+      "id": "simdN",
+      "type": "promptString",
+      "description": "Vector length for omp_simd_intro",
+      "default": "50000000"
+    },
+    {
+      "id": "simdReps",
+      "type": "promptString",
+      "description": "Number of repetitions for SIMD kernel",
+      "default": "5"
+    },
 
-    { "id": "taskN", "type": "promptString", "default": "40" },
-    { "id": "taskCutoff", "type": "promptString", "default": "20" },
-    { "id": "taskItems", "type": "promptString", "default": "8" },
-    { "id": "taskVerbosity", "type": "promptString", "default": "1" },
-    { "id": "ganttWidth", "type": "promptString", "default": "80" },
-    { "id": "ganttEvents", "type": "promptString", "default": "0" }
+    {
+      "id": "taskN",
+      "type": "promptString",
+      "description": "Fibonacci index n for omp_tasks_intro",
+      "default": "40"
+    },
+    {
+      "id": "taskCutoff",
+      "type": "promptString",
+      "description": "Task cutoff depth for omp_tasks_intro",
+      "default": "20"
+    },
+    {
+      "id": "taskItems",
+      "type": "promptString",
+      "description": "Number of pipeline items for task-based examples",
+      "default": "8"
+    },
+    {
+      "id": "taskVerbosity",
+      "type": "promptString",
+      "description": "Verbosity level (0=summary, 1=full log)",
+      "default": "1"
+    },
+    {
+      "id": "ganttWidth",
+      "type": "promptString",
+      "description": "Width of Gantt timeline in characters",
+      "default": "80"
+    },
+    {
+      "id": "ganttEvents",
+      "type": "promptString",
+      "description": "Print event list (0=no, 1=yes)",
+      "default": "0"
+    }
   ]
 }
