@@ -33,7 +33,7 @@ OMP_Sieve_Schedule/primes.txt
 *.dylib
 
 # Executables
-*.exe
+# *.exe
 *.out
 *.app
 *.i*86
