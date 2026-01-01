@@ -71,25 +71,6 @@
 
 /* ---------- argument parsing helpers ---------- */
 
-static long long parse_ll_or_default(int argc, char *argv[], int index, long long def)
-{
-    if (argc <= index) {
-        return def;
-    }
-
-    errno = 0;
-    char *end = NULL;
-    long long v = strtoll(argv[index], &end, 10);
-
-    if (errno != 0 || end == argv[index] || *end != '\0' || v <= 0) {
-        fprintf(stderr, "Invalid numeric value at argv[%d]: '%s'\n", index, argv[index]);
-        fprintf(stderr, "Usage: %s [elements] [iters] [reps]\n", argv[0]);
-        exit(1);
-    }
-
-    return v;
-}
-
 static int parse_int_or_default(int argc, char *argv[], int index, int def)
 {
     if (argc <= index) {
@@ -103,6 +84,12 @@ static int parse_int_or_default(int argc, char *argv[], int index, int def)
     if (errno != 0 || end == argv[index] || *end != '\0' || v <= 0) {
         fprintf(stderr, "Invalid integer value at argv[%d]: '%s'\n", index, argv[index]);
         fprintf(stderr, "Usage: %s [elements] [iters] [reps]\n", argv[0]);
+        exit(1);
+    }
+
+    /* Keep within int range for array sizing and loops. */
+    if (v > (long)INT32_MAX) {
+        fprintf(stderr, "Value too large at argv[%d]: '%s'\n", index, argv[index]);
         exit(1);
     }
 
@@ -120,6 +107,11 @@ typedef struct {
 /*
  * Padded AoS element: force each element into a separate cache line.
  * This is often wasteful in memory, but is useful as a didactic mitigation.
+ *
+ * Note:
+ *   We compute a pad size so that sizeof(aos_pair_padded_t) is a multiple of
+ *   CACHELINE_BYTES (or close to it), reducing the probability that two adjacent
+ *   elements share a cache line.
  */
 typedef struct {
     long long a;

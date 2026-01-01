@@ -98,10 +98,15 @@ static double harmonic_serial_naive(long long n)
 /*
  * Pairwise (tree) reduction of an array of partial sums.
  * The order of operations is deterministic given a fixed array size.
+ *
+ * Note:
+ *   This function mutates the input array 'a' in-place. That is intentional:
+ *   we treat 'partials' as scratch space.
  */
 static double pairwise_tree_reduce(double *a, int count)
 {
     int active = count;
+
     while (active > 1) {
         int half = active / 2;
 
@@ -155,7 +160,12 @@ int main(int argc, char *argv[])
     int used_threads = 0;
     double *partials = NULL;
 
-    #pragma omp parallel default(none) shared(n, used_threads, partials)
+    /*
+     * IMPORTANT:
+     *   We use default(none), so every variable referenced inside must be explicitly
+     *   scoped as shared/private/etc.
+     */
+    #pragma omp parallel default(none) shared(n, used_threads, partials, parallel_pairwise)
     {
         int tid = omp_get_thread_num();
 
@@ -200,6 +210,10 @@ int main(int argc, char *argv[])
          */
         #pragma omp barrier
 
+        /*
+         * Combine on a single thread to enforce deterministic order.
+         * (The tree order is fixed for a fixed 'used_threads'.)
+         */
         #pragma omp single
         {
             parallel_pairwise = pairwise_tree_reduce(partials, used_threads);

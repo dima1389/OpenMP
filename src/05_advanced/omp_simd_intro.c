@@ -34,8 +34,6 @@
  *   gcc -O3 -march=native -ffast-math -Wall -Wextra -Wpedantic -g -fopenmp \
  *       omp_simd_intro.c -o omp_simd_intro
  *
- *   (More conservative flags are possible; -O3 is recommended to enable vectorization.)
- *
  * Execution:
  *   ./omp_simd_intro [N] [reps]
  *
@@ -53,9 +51,16 @@
  *   - For meaningful SIMD speedups, compile with optimization enabled (-O2/-O3).
  *   - On some systems, -march=native enables use of wider SIMD instructions.
  *
+ * Portability note (important for Windows/MinGW):
+ *   - C11 aligned_alloc() is not universally available in all toolchains/CRTs.
+ *   - This file uses a best-effort aligned allocation wrapper that prefers:
+ *       * _aligned_malloc/_aligned_free on Windows
+ *       * posix_memalign/free on POSIX
+ *       * aligned_alloc/free when reliably available
+ *
  * References:
  *   - OpenMP API Specification (OpenMP ARB): SIMD construct, parallel for simd
- *   - GCC documentation: "Vector Extensions" and auto-vectorization options
+ *   - GCC documentation: auto-vectorization options
  *   - LLVM/Clang documentation: loop vectorizer and OpenMP SIMD support
  */
 
@@ -64,6 +69,10 @@
 #include <errno.h>
 #include <string.h>
 #include <omp.h>
+
+#if defined(_WIN32)
+  #include <malloc.h> /* _aligned_malloc, _aligned_free */
+#endif
 
 /* ---------- argument parsing helpers ---------- */
 
@@ -108,15 +117,52 @@ static int parse_int_or_default(int argc, char *argv[], int index, int def)
 /* ---------- memory utilities ---------- */
 
 /*
- * Allocate an array of doubles with a requested alignment (best-effort).
- * This helps demonstrate typical alignment practices for SIMD.
+ * aligned_alloc_best_effort / aligned_free_best_effort
  *
- * Uses C11 aligned_alloc where available; falls back to malloc otherwise.
- * Note: aligned_alloc requires size be a multiple of alignment.
+ * Rationale:
+ *   - aligned_alloc() is C11, but not always implemented/declared by MinGW/CRT combos
+ *     unless specific standards/headers/runtime versions align.
+ *   - To avoid toolchain-specific friction, we select a reliable allocator per platform.
+ *
+ * Contract:
+ *   - Returns a pointer aligned to 'alignment' (best effort). Exits on failure.
+ *   - Must be freed using aligned_free_best_effort() (not plain free() on Windows).
  */
 static void *aligned_alloc_best_effort(size_t alignment, size_t size)
 {
-#if defined(__STDC_VERSION__) && (__STDC_VERSION__ >= 201112L)
+    if (alignment == 0u) {
+        fprintf(stderr, "Invalid alignment: 0\n");
+        exit(1);
+    }
+
+#if defined(_WIN32)
+    /* Windows: _aligned_malloc requires power-of-two alignment in practice. */
+    void *p = _aligned_malloc(size, alignment);
+    if (p == NULL) {
+        fprintf(stderr, "_aligned_malloc failed (size=%zu, alignment=%zu)\n", size, alignment);
+        exit(1);
+    }
+    return p;
+
+#elif defined(_POSIX_C_SOURCE) && (_POSIX_C_SOURCE >= 200112L)
+    /* POSIX: posix_memalign requires alignment to be a multiple of sizeof(void*). */
+    void *p = NULL;
+    int rc = posix_memalign(&p, alignment, size);
+    if (rc != 0 || p == NULL) {
+        fprintf(stderr, "posix_memalign failed (rc=%d, size=%zu, alignment=%zu)\n", rc, size, alignment);
+        exit(1);
+    }
+    return p;
+
+#elif defined(__STDC_VERSION__) && (__STDC_VERSION__ >= 201112L)
+    /*
+     * C11: aligned_alloc requires size be a multiple of alignment.
+     * We round up to satisfy the requirement.
+     *
+     * Note:
+     *   Some libcs/toolchains still do not provide aligned_alloc even in C11 mode.
+     *   If your build fails here, prefer the POSIX or Windows path above.
+     */
     size_t rounded = (size + alignment - 1u) / alignment * alignment;
     void *p = aligned_alloc(alignment, rounded);
     if (p == NULL) {
@@ -124,14 +170,28 @@ static void *aligned_alloc_best_effort(size_t alignment, size_t size)
         exit(1);
     }
     return p;
+
 #else
-    (void)alignment;
+    /* Fallback: no guaranteed alignment beyond malloc's default. */
     void *p = malloc(size);
     if (p == NULL) {
         fprintf(stderr, "malloc failed (size=%zu)\n", size);
         exit(1);
     }
     return p;
+#endif
+}
+
+static void aligned_free_best_effort(void *p)
+{
+    if (p == NULL) {
+        return;
+    }
+
+#if defined(_WIN32)
+    _aligned_free(p);
+#else
+    free(p);
 #endif
 }
 
@@ -160,7 +220,7 @@ static double checksum(const double *y, long long n)
 
 /* ---------- kernels ---------- */
 
-static double run_serial(double *x, double *y, long long n, int reps, double a)
+static double run_serial(const double *x, double *y, long long n, int reps, double a)
 {
     double t0 = omp_get_wtime();
 
@@ -173,7 +233,7 @@ static double run_serial(double *x, double *y, long long n, int reps, double a)
     return omp_get_wtime() - t0;
 }
 
-static double run_simd(double *x, double *y, long long n, int reps, double a)
+static double run_simd(const double *x, double *y, long long n, int reps, double a)
 {
     double t0 = omp_get_wtime();
 
@@ -187,7 +247,7 @@ static double run_simd(double *x, double *y, long long n, int reps, double a)
     return omp_get_wtime() - t0;
 }
 
-static double run_parallel_simd(double *x, double *y, long long n, int reps, double a)
+static double run_parallel_simd(const double *x, double *y, long long n, int reps, double a)
 {
     double t0 = omp_get_wtime();
 
@@ -220,11 +280,11 @@ int main(int argc, char *argv[])
 
     /*
      * Allocate vectors with a typical alignment for SIMD-friendly loads/stores.
-     * 64 bytes is a common alignment choice on modern systems.
+     * 64 bytes is a common choice (often >= cache line size and friendly for AVX).
      */
     const size_t alignment = 64;
 
-    double *x = (double *)aligned_alloc_best_effort(alignment, (size_t)n * sizeof(double));
+    double *x  = (double *)aligned_alloc_best_effort(alignment, (size_t)n * sizeof(double));
     double *y0 = (double *)aligned_alloc_best_effort(alignment, (size_t)n * sizeof(double));
     double *y1 = (double *)aligned_alloc_best_effort(alignment, (size_t)n * sizeof(double));
     double *y2 = (double *)aligned_alloc_best_effort(alignment, (size_t)n * sizeof(double));
@@ -247,20 +307,18 @@ int main(int argc, char *argv[])
     double c2 = checksum(y2, n);
 
     printf("Timings:\n");
-    printf("  serial:           %.6f s\n", t_serial);
-    printf("  omp simd:         %.6f s\n", t_simd);
-    printf("  parallel for simd %.6f s\n\n", t_par_simd);
+    printf("  serial:            %.6f s\n", t_serial);
+    printf("  omp simd:          %.6f s\n", t_simd);
+    printf("  parallel for simd: %.6f s\n\n", t_par_simd);
 
     printf("Checksums:\n");
-    printf("  serial:           %.6f\n", c0);
-    printf("  omp simd:         %.6f\n", c1);
-    printf("  parallel for simd %.6f\n\n", c2);
+    printf("  serial:            %.6f\n", c0);
+    printf("  omp simd:          %.6f\n", c1);
+    printf("  parallel for simd: %.6f\n\n", c2);
 
     /*
-     * Validate that all variants produced identical results (within exact equality).
-     * For this deterministic kernel and identical operation order within each variant,
-     * equality is typically expected, but floating-point differences are possible
-     * across compilers/flags. For a production test, prefer an epsilon comparison.
+     * Validate that all variants produced identical results (via checksum).
+     * For robust validation in production, use an epsilon-based comparison.
      */
     if (c0 == c1 && c0 == c2) {
         printf("Result check: PASS (checksums match exactly)\n\n");
@@ -270,15 +328,15 @@ int main(int argc, char *argv[])
     }
 
     printf("Interpretation:\n");
-    printf("  - omp simd requests vectorization of the loop body within a single thread.\n");
-    printf("  - parallel for simd combines thread-level parallelism with SIMD within each thread.\n");
-    printf("  - SIMD effectiveness depends on contiguous access, alignment, and absence of loop-carried dependencies.\n");
-    printf("  - Always inspect compiler vectorization reports when teaching or tuning SIMD code.\n");
+    printf("  - omp simd requests vectorization within a single thread.\n");
+    printf("  - parallel for simd combines multithreading with SIMD in each thread.\n");
+    printf("  - SIMD effectiveness depends on contiguous access, alignment, and no loop-carried dependencies.\n");
+    printf("  - Use compiler vectorization reports to confirm actual SIMD code generation.\n");
 
-    free(x);
-    free(y0);
-    free(y1);
-    free(y2);
+    aligned_free_best_effort(x);
+    aligned_free_best_effort(y0);
+    aligned_free_best_effort(y1);
+    aligned_free_best_effort(y2);
 
     return 0;
 }

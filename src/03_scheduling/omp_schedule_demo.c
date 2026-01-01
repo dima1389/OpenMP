@@ -176,9 +176,18 @@ static const char *sched_name(omp_sched_t kind)
  *
  * We use a reduction to accumulate a dummy value, preventing the compiler from
  * optimizing away the loop body.
+ *
+ * Chunk semantics:
+ *   - For schedule(static|dynamic|guided, chunk), OpenMP requires chunk > 0.
+ *   - For schedule(runtime), chunk is controlled by OMP_SCHEDULE, so we ignore it.
  */
 static double run_schedule(omp_sched_t kind, int chunk, long long n, int pattern)
 {
+    /* OpenMP requires a positive chunk for schedule(kind,chunk). */
+    if (chunk <= 0) {
+        chunk = 1;
+    }
+
     double sum = 0.0;
     double t0 = omp_get_wtime();
 
@@ -187,19 +196,19 @@ static double run_schedule(omp_sched_t kind, int chunk, long long n, int pattern
      * unless using schedule(runtime).
      */
     if (kind == omp_sched_static) {
-        #pragma omp parallel for default(none) shared(n, pattern, chunk) reduction(+:sum) schedule(static, 1)
+        #pragma omp parallel for default(none) shared(n, pattern, chunk) reduction(+:sum) schedule(static, chunk)
         for (long long i = 0; i < n; ++i) {
             int units = workload_units(i, n, pattern);
             sum += burn_cpu(units);
         }
     } else if (kind == omp_sched_dynamic) {
-        #pragma omp parallel for default(none) shared(n, pattern, chunk) reduction(+:sum) schedule(dynamic, 1)
+        #pragma omp parallel for default(none) shared(n, pattern, chunk) reduction(+:sum) schedule(dynamic, chunk)
         for (long long i = 0; i < n; ++i) {
             int units = workload_units(i, n, pattern);
             sum += burn_cpu(units);
         }
     } else if (kind == omp_sched_guided) {
-        #pragma omp parallel for default(none) shared(n, pattern, chunk) reduction(+:sum) schedule(guided, 1)
+        #pragma omp parallel for default(none) shared(n, pattern, chunk) reduction(+:sum) schedule(guided, chunk)
         for (long long i = 0; i < n; ++i) {
             int units = workload_units(i, n, pattern);
             sum += burn_cpu(units);
@@ -254,14 +263,13 @@ int main(int argc, char *argv[])
     /*
      * Chunk size:
      * For didactic simplicity, we use chunk=1 in static/dynamic/guided runs.
-     * A companion example can explore chunk size effects in more depth.
+     * A companion example can explore chunk size effects in more depth by varying
+     * the chunk parameter passed to run_schedule().
      */
-    (void)current_chunk;
-
-    double t_static  = run_schedule(omp_sched_static, 1, n, pattern);
+    double t_static  = run_schedule(omp_sched_static,  1, n, pattern);
     double t_dynamic = run_schedule(omp_sched_dynamic, 1, n, pattern);
-    double t_guided  = run_schedule(omp_sched_guided, 1, n, pattern);
-    double t_runtime = run_schedule(omp_sched_auto,   0, n, pattern); /* uses schedule(runtime) */
+    double t_guided  = run_schedule(omp_sched_guided,  1, n, pattern);
+    double t_runtime = run_schedule(omp_sched_auto,    0, n, pattern); /* uses schedule(runtime) */
 
     printf("Timings (seconds):\n");
     printf("  schedule(static,1):   %.6f\n", t_static);
