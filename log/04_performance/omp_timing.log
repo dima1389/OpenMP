@@ -1,0 +1,23 @@
+Executing task: D:\Projects\OpenMP\bin\04_performance\omp_timing.exe 80000000 1
+
+OpenMP timing demonstration
+N = 80000000, pattern = 1
+Max threads available: 8
+
+Thread 7/8 local_elapsed = 33.327000 s
+Thread 2/8 local_elapsed = 33.328000 s
+Thread 6/8 local_elapsed = 33.328000 s
+Thread 3/8 local_elapsed = 33.328000 s
+Thread 5/8 local_elapsed = 33.328000 s
+Thread 1/8 local_elapsed = 33.328000 s
+Thread 0/8 local_elapsed = 33.327000 s
+Thread 4/8 local_elapsed = 33.328000 s
+
+Max thread elapsed time (effective parallel time): 33.328000 s
+Computation sink (ignore): 725760.000053
+
+Interpretation:
+  - Each thread measures its own elapsed time for the same parallel phase.
+  - The program's time-to-solution for that phase is bounded by the slowest thread.
+  - Therefore, max(local_elapsed) is the most relevant timing metric in SPMD-style OpenMP.
+  - Barriers around the timed region reduce measurement skew.

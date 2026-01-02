@@ -1,0 +1,12 @@
+Executing task: D:\Projects\OpenMP\bin\01_basics\omp_reduction.exe 100000000
+
+OpenMP reduction demonstration
+N = 100000000 (summing i = 1..N)
+Max threads available (omp_get_max_threads): 8
+
+[Serial]   sum = 5000000050000000, time = 0.041000 s
+[Raced]    sum = 78125006250000, time = 0.006000 s  (expected to be wrong / unstable)
+[Reduced]  sum = 5000000050000000, time = 0.006000 s
+
+Validation: PASS (reduction matches serial reference)
+Speedup (Serial/Reduced): 6.83 x

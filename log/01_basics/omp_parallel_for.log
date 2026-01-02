@@ -1,0 +1,16 @@
+Executing task: D:\Projects\OpenMP\bin\01_basics\omp_parallel_for.exe 100000000
+
+OpenMP parallel for example
+N = 100000000
+Max threads available: 8
+
+Parallel sum   = 5000000050000000
+Serial formula = 5000000050000000
+Result check: PASS
+Elapsed time (parallel loop): 0.007000 s
+
+Interpretation:
+  - #pragma omp parallel for is the most common OpenMP construct for data-parallel loops.
+  - Iterations are divided among threads automatically by the runtime.
+  - The reduction clause safely combines partial results without explicit synchronization.
+  - An implicit barrier occurs at the end of the loop unless 'nowait' is specified.

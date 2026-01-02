@@ -1,0 +1,15 @@
+Executing task: D:\Projects\OpenMP\bin\01_basics\omp_hello.exe
+
+OpenMP hello example
+Maximum available threads: 8
+
+Hello from thread 1 of 8
+Hello from thread 5 of 8
+Hello from thread 6 of 8
+Hello from thread 0 of 8
+Hello from thread 4 of 8
+Hello from thread 2 of 8
+Hello from thread 7 of 8
+Hello from thread 3 of 8
+
+Back to serial execution.

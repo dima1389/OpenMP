@@ -1,0 +1,87 @@
+Executing task: D:\Projects\OpenMP\bin\01_basics\omp_data_sharing.exe
+
+OpenMP data-sharing demonstration
+Max threads available (omp_get_max_threads): 8
+
+Thread 1/8
+  shared_counter (after increment): 1  [shared storage]
+  initial_value: 42                 [shared storage]
+  fp_value: 42                      [per-thread initialized copy]
+  private_value: 1001                 [per-thread storage]
+  &shared_counter: 0000004af73ff858
+  &initial_value:  0000004af73ff85c
+  &fp_value:       0000004af7bffdc8
+  &private_value:  0000004af7bffdcc
+
+Thread 0/8
+  shared_counter (after increment): 2  [shared storage]
+  initial_value: 42                 [shared storage]
+  fp_value: 42                      [per-thread initialized copy]
+  private_value: 1000                 [per-thread storage]
+  &shared_counter: 0000004af73ff858
+  &initial_value:  0000004af73ff85c
+  &fp_value:       0000004af73ff7a8
+  &private_value:  0000004af73ff7ac
+
+Thread 3/8
+  shared_counter (after increment): 3  [shared storage]
+  initial_value: 42                 [shared storage]
+  fp_value: 42                      [per-thread initialized copy]
+  private_value: 1003                 [per-thread storage]
+  &shared_counter: 0000004af73ff858
+  &initial_value:  0000004af73ff85c
+  &fp_value:       0000004af7fffb48
+  &private_value:  0000004af7fffb4c
+
+Thread 5/8
+  shared_counter (after increment): 4  [shared storage]
+  initial_value: 42                 [shared storage]
+  fp_value: 42                      [per-thread initialized copy]
+  private_value: 1005                 [per-thread storage]
+  &shared_counter: 0000004af73ff858
+  &initial_value:  0000004af73ff85c
+  &fp_value:       0000004af83ffab8
+  &private_value:  0000004af83ffabc
+
+Thread 2/8
+  shared_counter (after increment): 5  [shared storage]
+  initial_value: 42                 [shared storage]
+  fp_value: 42                      [per-thread initialized copy]
+  private_value: 1002                 [per-thread storage]
+  &shared_counter: 0000004af73ff858
+  &initial_value:  0000004af73ff85c
+  &fp_value:       0000004af7dff998
+  &private_value:  0000004af7dff99c
+
+Thread 6/8
+  shared_counter (after increment): 6  [shared storage]
+  initial_value: 42                 [shared storage]
+  fp_value: 42                      [per-thread initialized copy]
+  private_value: 1006                 [per-thread storage]
+  &shared_counter: 0000004af73ff858
+  &initial_value:  0000004af73ff85c
+  &fp_value:       0000004af85ff858
+  &private_value:  0000004af85ff85c
+
+Thread 4/8
+  shared_counter (after increment): 7  [shared storage]
+  initial_value: 42                 [shared storage]
+  fp_value: 42                      [per-thread initialized copy]
+  private_value: 1004                 [per-thread storage]
+  &shared_counter: 0000004af73ff858
+  &initial_value:  0000004af73ff85c
+  &fp_value:       0000004af81ff6c8
+  &private_value:  0000004af81ff6cc
+
+Thread 7/8
+  shared_counter (after increment): 8  [shared storage]
+  initial_value: 42                 [shared storage]
+  fp_value: 42                      [per-thread initialized copy]
+  private_value: 1007                 [per-thread storage]
+  &shared_counter: 0000004af73ff858
+  &initial_value:  0000004af73ff85c
+  &fp_value:       0000004af87ffb78
+  &private_value:  0000004af87ffb7c
+
+After parallel region:
+  shared_counter final value: 8

@@ -1,0 +1,24 @@
+Executing task: D:\Projects\OpenMP\bin\05_advanced\omp_simd_intro.exe 50000000 5
+
+OpenMP SIMD introduction
+Kernel: y[i] = a*x[i] + y[i]
+N = 50000000, reps = 5
+Max threads available: 8
+
+Timings:
+  serial:            0.348000 s
+  omp simd:          0.320000 s
+  parallel for simd: 0.365000 s
+
+Checksums:
+  serial:            359900262.370398
+  omp simd:          359900262.370398
+  parallel for simd: 359900262.370398
+
+Result check: PASS (checksums match exactly)
+
+Interpretation:
+  - omp simd requests vectorization within a single thread.
+  - parallel for simd combines multithreading with SIMD in each thread.
+  - SIMD effectiveness depends on contiguous access, alignment, and no loop-carried dependencies.
+  - Use compiler vectorization reports to confirm actual SIMD code generation.

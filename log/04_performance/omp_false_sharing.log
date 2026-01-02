@@ -1,0 +1,41 @@
+Executing task: D:\Projects\OpenMP\bin\04_performance\omp_false_sharing.exe 2000000000000000000 5
+
+OpenMP false sharing demonstration
+iters per thread = 2000000000000000000, repetitions = 5
+Max threads available: 8
+Assumed cache line size: 64 bytes
+
+Threads used in parallel regions: 8
+
+Expected total increments: -2446744073709551616
+
+Rep 1/5:
+  Packed: time = 0.000000 s, total = -2446744073709551616
+  Padded: time = 0.000000 s, total = -2446744073709551616
+
+Rep 2/5:
+  Packed: time = 0.000000 s, total = -2446744073709551616
+  Padded: time = 0.000000 s, total = -2446744073709551616
+
+Rep 3/5:
+  Packed: time = 0.000000 s, total = -2446744073709551616
+  Padded: time = 0.000000 s, total = -2446744073709551616
+
+Rep 4/5:
+  Packed: time = 0.000000 s, total = -2446744073709551616
+  Padded: time = 0.000000 s, total = -2446744073709551616
+
+Rep 5/5:
+  Packed: time = 0.000000 s, total = -2446744073709551616
+  Padded: time = 0.000000 s, total = -2446744073709551616
+
+Average timings over 5 repetitions:
+  Packed: 0.000000 s
+  Padded: 0.000000 s
+
+Interpretation:
+  - If Packed is significantly slower than Padded, false sharing is likely.
+  - Padding places each thread's frequently-written counter in a different cache line,
+    reducing coherence traffic and improving throughput.
+  - Real applications often experience false sharing in arrays of structs, per-thread
+    statistics, and frequently-updated counters.

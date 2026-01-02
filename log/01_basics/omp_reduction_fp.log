@@ -1,0 +1,21 @@
+Executing task: D:\Projects\OpenMP\bin\01_basics\omp_reduction_fp.exe 100000000
+
+OpenMP floating-point reduction demonstration (intermediate)
+Series: H_N = sum_{i=1..N} (1.0 / i)
+N = 100000000
+Max threads available (omp_get_max_threads): 8
+
+[Serial]   H_N = 18.997896413852555, time = 0.107000 s
+[Reduced]  H_N = 18.997896413851894, time = 0.028000 s
+
+Difference analysis (Reduced vs Serial):
+  Absolute error: 6.6080474425689317e-13
+  Relative error: 3.4783048073420337e-14
+
+Interpretation:
+  - If the results differ slightly, this is expected due to floating-point
+    rounding and different summation order in the reduction tree.
+  - If you require reproducible results, you need a reproducible summation
+    approach (fixed reduction tree or compensated summation).
+
+Speedup (Serial/Reduced): 3.82 x

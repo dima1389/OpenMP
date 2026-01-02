@@ -1,0 +1,22 @@
+Executing task: D:\Projects\OpenMP\bin\03_scheduling\omp_schedule_demo.exe 500000 1
+
+OpenMP scheduling demonstration
+N = 500000 iterations, pattern = 1
+Max threads available: 8
+Current OpenMP runtime schedule: dynamic, chunk = 1
+
+Timings (seconds):
+  schedule(static,1):   2.323000
+  schedule(dynamic,1):  2.315000
+  schedule(guided,1):   2.395000
+  schedule(runtime):    2.625000  (set OMP_SCHEDULE)
+
+Interpretation guidelines:
+  - static:  lowest overhead, but can load-imbalance for uneven iteration costs.
+  - dynamic: better balance, higher overhead due to runtime work assignment.
+  - guided:  starts with large chunks, decreases chunk size; often good balance.
+  - runtime: schedule chosen externally via OMP_SCHEDULE for experimentation.
+
+Examples:
+  export OMP_SCHEDULE="dynamic,1024"; ./omp_schedule_demo 500000 1
+  export OMP_SCHEDULE="guided";       ./omp_schedule_demo 500000 1

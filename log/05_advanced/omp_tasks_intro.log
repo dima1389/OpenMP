@@ -1,0 +1,16 @@
+Executing task: D:\Projects\OpenMP\bin\05_advanced\omp_tasks_intro.exe 40 20
+
+OpenMP tasks introduction
+Compute Fibonacci(n) with task parallelism
+n = 40, cutoff = 20
+Max threads available: 8
+
+Result: Fibonacci(40) = 102334155
+Elapsed time: 0.135000 s
+
+Interpretation:
+  - Tasks allow irregular and recursive parallelism that does not fit a simple
+    parallel-for loop.
+  - The cutoff parameter controls task granularity; too small => many tasks and
+    high overhead; too large => insufficient parallelism.
+  - The OpenMP runtime schedules tasks across threads dynamically.

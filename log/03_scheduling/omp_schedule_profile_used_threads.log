@@ -1,0 +1,94 @@
+Executing task: D:\Projects\OpenMP\bin\03_scheduling\omp_schedule_profile_used_threads.exe 200000 1 1
+
+OpenMP scheduling profiler (prints only used threads)
+N = 200000, pattern = 1, chunk = 1
+Max threads available: 8
+Runtime schedule (omp_get_schedule): kind=dynamic, chunk=1
+
+Schedule: static
+Thread | Iterations | WorkUnits
+-------+------------+----------
+     0 |      25000 |  1679427
+     1 |      25000 |  1679459
+     2 |      25000 |  1679482
+     3 |      25000 |  1679498
+     4 |      25000 |  1679530
+     5 |      25000 |  1679559
+     6 |      25000 |  1679578
+     7 |      25000 |  1679599
+-------+------------+----------
+Total  |     200000 | 13436132
+
+Balance metrics:
+  Iterations: min=25000, max=25000, ratio(max/min)=1.000
+  WorkUnits:  min=1679427, max=1679599, ratio(max/min)=1.000
+
+Elapsed time (static):  0.000000 s
+
+Schedule: dynamic
+Thread | Iterations | WorkUnits
+-------+------------+----------
+     0 |      25345 |  1821956
+     1 |      23080 |  1480098
+     2 |      26861 |  1693302
+     3 |      19033 |  1110857
+     4 |      25022 |  1854323
+     5 |      29966 |  1970913
+     6 |      26645 |  1969195
+     7 |      24048 |  1535488
+-------+------------+----------
+Total  |     200000 | 13436132
+
+Balance metrics:
+  Iterations: min=19033, max=29966, ratio(max/min)=1.574
+  WorkUnits:  min=1110857, max=1970913, ratio(max/min)=1.774
+
+Elapsed time (dynamic): 0.015000 s
+
+Schedule: guided
+Thread | Iterations | WorkUnits
+-------+------------+----------
+     0 |      27734 |   538337
+     1 |      27081 |  1978671
+     2 |      25668 |  2382838
+     3 |      15223 |  1596688
+     4 |      26651 |  2216035
+     5 |      27764 |  1631793
+     6 |      24976 |  2405868
+     7 |      24903 |   685902
+-------+------------+----------
+Total  |     200000 | 13436132
+
+Balance metrics:
+  Iterations: min=15223, max=27764, ratio(max/min)=1.824
+  WorkUnits:  min=538337, max=2405868, ratio(max/min)=4.469
+
+Elapsed time (guided):  0.001000 s
+
+Schedule: runtime (set via OMP_SCHEDULE)
+Thread | Iterations | WorkUnits
+-------+------------+----------
+     0 |      24982 |  1824149
+     1 |      26667 |  1753191
+     2 |      23964 |  1592881
+     3 |      25960 |  1766784
+     4 |      24398 |  1447350
+     5 |      25262 |  1707566
+     6 |      25221 |  1781058
+     7 |      23546 |  1563153
+-------+------------+----------
+Total  |     200000 | 13436132
+
+Balance metrics:
+  Iterations: min=23546, max=26667, ratio(max/min)=1.133
+  WorkUnits:  min=1447350, max=1824149, ratio(max/min)=1.260
+
+Elapsed time (runtime): 0.017000 s
+
+Guidance:
+  - Compare WorkUnits distribution across schedules to see load balance.
+  - Compare elapsed times to see overhead vs balance trade-offs.
+  - Experiment with:
+      export OMP_NUM_THREADS=4
+      export OMP_SCHEDULE="dynamic,1024"
+      export OMP_SCHEDULE="guided,64"

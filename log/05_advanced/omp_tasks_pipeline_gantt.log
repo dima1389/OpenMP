@@ -1,0 +1,55 @@
+Executing task: D:\Projects\OpenMP\bin\05_advanced\omp_tasks_pipeline_gantt.exe 8 80 1
+
+OpenMP pipeline Gantt visualization (tasks + depend)
+items = 8, width = 80, print_events = 1
+Max threads available: 8
+
+Total elapsed time: 0.003000 s
+
+Legend:
+  A = produce, B = transform, C = consume
+  Digits after stage letter indicate item id (best-effort annotation)
+
+Gantt-like timeline (each row = one OpenMP thread):
+Time: 0----------------------------------|---------------------------------|-T=0.003s
+T00: A0AAAAAAAAAAAAAAAAAAAAAAAAA6BBBBBBBBBBBBBBBBBBBBBBBBC6CCCCCCCCCCCCCCCCCCCCCCCCCC
+T01: A1AAAAAAAAAAAAAAAAAAAAAAAAB5BBBBBBBBBBBBBBBBBBBBBBBBC...........................
+T02: A2AAAAAAAAAAAAAAAAAAAAAAAAB0BBBBBBBBBBBBBBBBBBBBBBBBB7BBBBBBBBBBBBBBBBBBBBBBBBBC
+T03: A6AAAAAAAAAAAAAAAAAAAAAAAAB1BBBBBBBBBBBBBBBBBBBBBBBBC...........................
+T04: A4AAAAAAAAAAAAAAAAAAAAAAAAB2BBBBBBBBBBBBBBBBBBBBBBBBC...........................
+T05: A3AAAAAAAAAAAAAAAAAAAAAAAAB4BBBBBBBBBBBBBBBBBBBBBBBBC...........................
+T06: A5AAAAAAAAAAAAAAAAAAAAAAAAB3BBBBBBBBBBBBBBBBBBBBBBBBC...........................
+
+Interpretation:
+  - Overlap is visible when multiple thread rows contain activity (A/B/C) at the same time.
+  - Within each item, A must complete before B, and B before C (depend() constraints).
+  - The runtime may schedule tasks on any worker thread, so stages for a given item
+    can appear on different rows.
+
+Event list (sorted by start time):
+Start    End      Dur      TID  Item  Stage
+-------- -------- -------- ---- ----- ----------------
+  0.0000   0.0010   0.0010    0     0 A (produce)
+  0.0000   0.0010   0.0010    1     1 A (produce)
+  0.0000   0.0010   0.0010    2     2 A (produce)
+  0.0000   0.0010   0.0010    3     6 A (produce)
+  0.0000   0.0010   0.0010    4     4 A (produce)
+  0.0000   0.0010   0.0010    5     3 A (produce)
+  0.0000   0.0010   0.0010    6     5 A (produce)
+  0.0010   0.0020   0.0010    0     6 B (transform)
+  0.0010   0.0010   0.0000    0     7 A (produce)
+  0.0010   0.0020   0.0010    1     5 B (transform)
+  0.0010   0.0020   0.0010    2     0 B (transform)
+  0.0010   0.0020   0.0010    3     1 B (transform)
+  0.0010   0.0020   0.0010    4     2 B (transform)
+  0.0010   0.0020   0.0010    5     4 B (transform)
+  0.0010   0.0020   0.0010    6     3 B (transform)
+  0.0020   0.0030   0.0010    0     6 C (consume)
+  0.0020   0.0020   0.0000    1     1 C (consume)
+  0.0020   0.0030   0.0010    2     7 B (transform)
+  0.0020   0.0020   0.0000    3     3 C (consume)
+  0.0020   0.0020   0.0000    4     0 C (consume)
+  0.0020   0.0020   0.0000    4     5 C (consume)
+  0.0020   0.0020   0.0000    5     2 C (consume)
+  0.0020   0.0020   0.0000    6     4 C (consume)
+  0.0030   0.0030   0.0000    2     7 C (consume)

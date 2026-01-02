@@ -1,0 +1,14 @@
+Executing task: D:\Projects\OpenMP\bin\04_performance\omp_timing_reduce_max.exe 80000000
+
+OpenMP timing (reduction(max))
+N = 80000000
+Max threads available: 8
+
+Effective parallel time (max thread): 11.123000 s
+Computation sink (ignore): 6383999.998899
+
+Interpretation:
+  - Each thread measures its own elapsed time for the same parallel phase.
+  - The effective execution time is the maximum of these local times.
+  - reduction(max: ...) expresses this directly and avoids manual synchronization.
+  - This pattern is suitable for clean performance experiments and scaling studies.

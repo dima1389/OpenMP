@@ -1,0 +1,18 @@
+Executing task: D:\Projects\OpenMP\bin\03_scheduling\omp_schedule_demo_chunks.exe 5000000 1 1
+
+OpenMP scheduling demo (chunk size sensitivity)
+N = 5000000, pattern = 1, chunk = 1
+Max threads available: 8
+Runtime schedule: kind=2, chunk=1
+
+Timings (seconds):
+  static (1):   26.064000
+  dynamic(1):   31.063000
+  guided (1):   30.427000
+  runtime:       30.872000  (OMP_SCHEDULE)
+
+Interpretation:
+  - Smaller chunks improve load balance but increase scheduling overhead.
+  - Larger chunks reduce overhead but risk load imbalance.
+  - dynamic/guided schedules benefit most from careful chunk tuning.
+  - runtime allows experimentation without recompilation.

@@ -1,0 +1,39 @@
+Executing task: D:\Projects\OpenMP\bin\05_advanced\omp_tasks_depend.exe 8
+
+OpenMP task dependencies demonstration
+Pipeline items: 8
+Max threads available: 8
+
+Thread 4: Stage A (produce) item 0
+Thread 3: Stage A (produce) item 1
+Thread 6: Stage A (produce) item 4
+Thread 2: Stage A (produce) item 2
+Thread 5: Stage A (produce) item 5
+Thread 0: Stage A (produce) item 3
+Thread 1: Stage A (produce) item 6
+Thread 7: Stage A (produce) item 7
+Thread 4: Stage B (transform) item 0
+Thread 3: Stage B (transform) item 1
+Thread 6: Stage B (transform) item 4
+Thread 2: Stage B (transform) item 2
+Thread 5: Stage B (transform) item 5
+Thread 0: Stage B (transform) item 3
+Thread 1: Stage B (transform) item 6
+Thread 7: Stage B (transform) item 7
+Thread 4: Stage C (consume) item 0
+Thread 3: Stage C (consume) item 1
+Thread 6: Stage C (consume) item 4
+Thread 2: Stage C (consume) item 2
+Thread 5: Stage C (consume) item 5
+Thread 0: Stage C (consume) item 3
+Thread 1: Stage C (consume) item 6
+Thread 7: Stage C (consume) item 7
+
+Elapsed time: 0.039000 s
+
+Interpretation:
+  - Tasks from different pipeline items may execute concurrently.
+  - Within a single item, Stage A -> B -> C ordering is enforced
+    purely by depend clauses (no barriers or taskwait).
+  - The runtime builds a task dependency graph (DAG) and schedules
+    tasks as soon as their dependencies are satisfied.

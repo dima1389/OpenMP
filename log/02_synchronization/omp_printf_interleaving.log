@@ -1,0 +1,58 @@
+Executing task: D:\Projects\OpenMP\bin\02_synchronization\omp_printf_interleaving.exe
+
+OpenMP printf interleaving demonstration
+Max threads available: 8
+
+=== Unsynchronized printf() ===
+Thread 1/8 says hello (0)
+Thread 1/8 says hello (1)
+Thread 1/8 says hello (2)
+Thread 5/8 says hello (0)
+Thread 5/8 says hello (1)
+Thread 5/8 says hello (2)
+Thread 2/8 says hello (0)
+Thread 2/8 says hello (1)
+Thread 2/8 says hello (2)
+Thread 7/8 says hello (0)
+Thread 7/8 says hello (1)
+Thread 7/8 says hello (2)
+Thread 4/8 says hello (0)
+Thread 4/8 says hello (1)
+Thread 4/8 says hello (2)
+Thread 6/8 says hello (0)
+Thread 6/8 says hello (1)
+Thread 6/8 says hello (2)
+Thread 3/8 says hello (0)
+Thread 3/8 says hello (1)
+Thread 3/8 says hello (2)
+Thread 0/8 says hello (0)
+Thread 0/8 says hello (1)
+Thread 0/8 says hello (2)
+
+=== Synchronized printf() using critical ===
+Thread 1/8 says hello (0)
+Thread 1/8 says hello (1)
+Thread 1/8 says hello (2)
+Thread 5/8 says hello (0)
+Thread 5/8 says hello (1)
+Thread 5/8 says hello (2)
+Thread 7/8 says hello (0)
+Thread 7/8 says hello (1)
+Thread 7/8 says hello (2)
+Thread 4/8 says hello (0)
+Thread 4/8 says hello (1)
+Thread 4/8 says hello (2)
+Thread 0/8 says hello (0)
+Thread 0/8 says hello (1)
+Thread 0/8 says hello (2)
+Thread 2/8 says hello (0)
+Thread 2/8 says hello (1)
+Thread 2/8 says hello (2)
+Thread 3/8 says hello (0)
+Thread 3/8 says hello (1)
+Thread 3/8 says hello (2)
+Thread 6/8 says hello (0)
+Thread 6/8 says hello (1)
+Thread 6/8 says hello (2)
+
+Back to serial execution.

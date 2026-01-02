@@ -1,0 +1,40 @@
+Executing task: D:\Projects\OpenMP\bin\05_advanced\omp_tasks_pipeline_overlap.exe 8 1
+
+OpenMP pipeline overlap demonstration (tasks + depend)
+items = 8, verbosity = 1
+Max threads available: 8
+
+Total elapsed time: 0.003000 s
+
+Event log (sorted by start time):
+Start    End      Dur      TID  Item  Stage
+-------- -------- -------- ---- ----- ----------------
+  0.0010   0.0010   0.0000    5     0 A (produce)
+  0.0010   0.0020   0.0010    5     0 B (transform)
+  0.0010   0.0010   0.0000    3     1 A (produce)
+  0.0010   0.0020   0.0010    3     1 B (transform)
+  0.0010   0.0010   0.0000    2     2 A (produce)
+  0.0010   0.0020   0.0010    2     2 B (transform)
+  0.0010   0.0010   0.0000    4     3 A (produce)
+  0.0010   0.0020   0.0010    4     3 B (transform)
+  0.0010   0.0010   0.0000    7     4 A (produce)
+  0.0010   0.0020   0.0010    7     4 B (transform)
+  0.0010   0.0010   0.0000    0     5 A (produce)
+  0.0010   0.0020   0.0010    0     5 B (transform)
+  0.0010   0.0010   0.0000    1     6 A (produce)
+  0.0010   0.0020   0.0010    1     6 B (transform)
+  0.0010   0.0010   0.0000    6     7 A (produce)
+  0.0010   0.0020   0.0010    6     7 B (transform)
+  0.0020   0.0030   0.0010    5     0 C (consume)
+  0.0020   0.0030   0.0010    3     1 C (consume)
+  0.0020   0.0030   0.0010    2     2 C (consume)
+  0.0020   0.0030   0.0010    4     3 C (consume)
+  0.0020   0.0030   0.0010    7     4 C (consume)
+  0.0020   0.0030   0.0010    0     5 C (consume)
+  0.0020   0.0030   0.0010    1     6 C (consume)
+  0.0020   0.0030   0.0010    6     7 C (consume)
+
+Interpretation:
+  - Overlap is visible when events from different items interleave in time.
+  - Within a single item, depend() enforces A -> B -> C ordering.
+  - The runtime schedules tasks as soon as their dependencies are satisfied.

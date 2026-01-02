@@ -1,0 +1,27 @@
+Executing task: D:\Projects\OpenMP\bin\02_synchronization\omp_barrier.exe
+
+OpenMP barrier synchronization example
+Max threads available: 8
+
+Thread 0/8 reached barrier after 0.10 s
+Thread 1/8 reached barrier after 0.20 s
+Thread 2/8 reached barrier after 0.30 s
+Thread 3/8 reached barrier after 0.40 s
+Thread 4/8 reached barrier after 0.50 s
+Thread 5/8 reached barrier after 0.60 s
+Thread 6/8 reached barrier after 0.70 s
+Thread 7/8 reached barrier after 0.80 s
+
+All threads have reached the barrier.
+Entering Phase 2.
+
+Thread 7/8 executing Phase 2 at 0.81 s
+Thread 0/8 executing Phase 2 at 0.81 s
+Thread 1/8 executing Phase 2 at 0.81 s
+Thread 6/8 executing Phase 2 at 0.81 s
+Thread 5/8 executing Phase 2 at 0.81 s
+Thread 4/8 executing Phase 2 at 0.81 s
+Thread 2/8 executing Phase 2 at 0.81 s
+Thread 3/8 executing Phase 2 at 0.81 s
+
+Back to serial execution.

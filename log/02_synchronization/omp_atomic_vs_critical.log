@@ -1,0 +1,21 @@
+Executing task: D:\Projects\OpenMP\bin\02_synchronization\omp_atomic_vs_critical.exe 200000000
+
+OpenMP atomic vs critical (with reduction baseline)
+Total increments N = 200000000
+Max threads available: 8
+
+Results:
+  atomic:    counter=200000000, time=5.784000 s
+  critical:  counter=200000000, time=6.282000 s
+  reduction: counter=200000000, time=0.000000 s
+
+Validation:
+  PASS: all methods produced the expected result.
+
+Interpretation:
+  - atomic protects a single read-modify-write update and is usually cheaper
+    than critical for simple operations such as counter increments.
+  - critical provides mutual exclusion for an arbitrary code block, but can
+    impose higher overhead and serialization.
+  - reduction is often the best choice for associative/commutative operations
+    because it minimizes contention (per-thread partial results).

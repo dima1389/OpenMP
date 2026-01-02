@@ -1,0 +1,52 @@
+Executing task: D:\Projects\OpenMP\bin\04_performance\omp_false_sharing_array.exe 1024 20000 5
+
+OpenMP false sharing: AoS vs SoA (with padded AoS)
+elements_per_thread = 1024, iters = 20000, reps = 5
+Max threads available: 8
+Assumed cache line size: 64 bytes
+
+Threads used: 8
+Total elements: 8192
+
+Expected checksum: 327680000
+
+Rep 1/5:
+  AoS:        time = 0.016000 s, checksum = 327680000
+  SoA:        time = 0.035000 s, checksum = 327680000
+  AoS padded: time = 0.046000 s, checksum = 327680000
+
+Rep 2/5:
+  AoS:        time = 0.020000 s, checksum = 327680000
+  SoA:        time = 0.028000 s, checksum = 327680000
+  AoS padded: time = 0.045000 s, checksum = 327680000
+
+Rep 3/5:
+  AoS:        time = 0.016000 s, checksum = 327680000
+  SoA:        time = 0.031000 s, checksum = 327680000
+  AoS padded: time = 0.051000 s, checksum = 327680000
+
+Rep 4/5:
+  AoS:        time = 0.015000 s, checksum = 327680000
+  SoA:        time = 0.032000 s, checksum = 327680000
+  AoS padded: time = 0.043000 s, checksum = 327680000
+
+Rep 5/5:
+  AoS:        time = 0.016000 s, checksum = 327680000
+  SoA:        time = 0.031000 s, checksum = 327680000
+  AoS padded: time = 0.052000 s, checksum = 327680000
+
+Average timings over 5 repetitions:
+  AoS:        0.016600 s
+  SoA:        0.031400 s
+  AoS padded: 0.047400 s
+
+Ratios (higher means slower than padded AoS):
+  AoS / AoS_padded: 0.35 x
+  SoA / AoS_padded: 0.66 x
+
+Interpretation:
+  - If AoS is slower than AoS_padded, boundary false sharing is likely.
+  - SoA vs AoS may differ due to memory layout effects and cache behavior.
+  - Padding is an explicit mitigation but increases memory footprint.
+  - Real codes typically mitigate false sharing by aligning/padding per-thread
+    structures or by changing ownership/blocking to reduce boundary contention.
