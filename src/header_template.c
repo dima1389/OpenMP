@@ -19,7 +19,7 @@
  *   - <Additional concept>
  *
  * OpenMP features used:
- *   Directives:
+ *   Directives (list only those actually used in this file):
  *     - parallel
  *     - for
  *     - simd
@@ -34,7 +34,7 @@
  *     - taskgroup
  *     - depend
  *
- *   Runtime library:
+ *   Runtime library (list only those actually called in this file):
  *     - omp_get_thread_num()
  *     - omp_get_num_threads()
  *     - omp_get_max_threads()
@@ -48,6 +48,8 @@
  *   For SIMD-intensive code:
  *   gcc -O3 -march=native -ffast-math -Wall -Wextra -Wpedantic -g -fopenmp \
  *       omp_<topic>.c -o omp_<topic>
+ *   Note: -ffast-math relaxes IEEE 754 compliance and may affect numerical accuracy.
+ *         Use with caution; remove if strict floating-point behavior is required.
  *
  * Execution:
  *   ./omp_<topic>
