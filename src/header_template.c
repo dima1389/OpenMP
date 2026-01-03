@@ -49,7 +49,8 @@
  *   gcc -O3 -march=native -ffast-math -Wall -Wextra -Wpedantic -g -fopenmp \
  *       omp_<topic>.c -o omp_<topic>
  *   Note: -ffast-math relaxes IEEE 754 compliance and may affect numerical accuracy.
- *         Use with caution; remove if strict floating-point behavior is required.
+ *         Use only when approximate results are acceptable (e.g., graphics, physics simulations).
+ *         For safer performance optimization, consider -fno-math-errno instead.
  *
  * Execution:
  *   ./omp_<topic>
@@ -63,7 +64,7 @@
  *
  *   Optional environment variables:
  *     export OMP_NUM_THREADS=4
- *     export OMP_SCHEDULE=<type[,chunk]>
+ *     export OMP_SCHEDULE=<type[,chunk]>     # e.g., static, dynamic, guided, auto
  *     export OMP_PROC_BIND=true
  *     export OMP_PLACES=cores
  *
@@ -79,8 +80,9 @@
  *   - <Additional note about compilation or portability>
  *
  * Portability note (Windows/MinGW):
- *   - <Any Windows-specific considerations if applicable>
- *   - <CRT compatibility notes if applicable>
+ *   - Thread affinity APIs may differ; OMP_PROC_BIND behavior varies by runtime
+ *   - Use _aligned_malloc/_aligned_free for aligned memory allocation
+ *   - Link against libgomp or libomp depending on compiler (GCC vs Clang)
  *
  * References:
  *   - OpenMP API Specification (OpenMP ARB): <specific sections or constructs>
