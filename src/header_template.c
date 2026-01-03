@@ -64,7 +64,8 @@
  *
  *   Optional environment variables:
  *     export OMP_NUM_THREADS=4
- *     export OMP_SCHEDULE=<type>[,chunk_size]  # chunk_size for static/dynamic/guided
+ *     export OMP_SCHEDULE=<type>[,chunk_size]  # Types: static, dynamic, guided, auto
+ *                                               # chunk_size for static/dynamic/guided only
  *     export OMP_PROC_BIND=true
  *     export OMP_PLACES=cores
  *
