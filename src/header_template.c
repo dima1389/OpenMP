@@ -50,7 +50,7 @@
  *       omp_<topic>.c -o omp_<topic>
  *   Note: -ffast-math relaxes IEEE 754 compliance and may affect numerical accuracy.
  *         Use only when approximate results are acceptable (e.g., graphics, physics simulations).
- *         For safer performance optimization, consider -fno-math-errno instead.
+ *         For intermediate options: -fno-signed-zeros, -fno-trapping-math, or -fno-math-errno.
  *
  * Execution:
  *   ./omp_<topic>
@@ -64,7 +64,7 @@
  *
  *   Optional environment variables:
  *     export OMP_NUM_THREADS=4
- *     export OMP_SCHEDULE=<type[,chunk]>     # e.g., static, dynamic, guided, auto
+ *     export OMP_SCHEDULE=<type>[,chunk_size]  # chunk_size for static/dynamic/guided
  *     export OMP_PROC_BIND=true
  *     export OMP_PLACES=cores
  *
