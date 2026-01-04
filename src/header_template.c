@@ -66,7 +66,7 @@
  *     export OMP_NUM_THREADS=4
  *     export OMP_SCHEDULE=<type>[,chunk_size]  # Types: static, dynamic, guided, auto
  *                                               # chunk_size for static/dynamic/guided only
- *     export OMP_PROC_BIND=true
+ *     export OMP_PROC_BIND=close               # Valid: true, false, close, spread, master (primary in OpenMP 5.1+)
  *     export OMP_PLACES=cores
  *
  * Examples:
