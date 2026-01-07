@@ -2,91 +2,48 @@
  * File:        omp_<topic>.c
  *
  * Purpose:
- *   Demonstrates <specific OpenMP concept> in a minimal and observable way.
+ *   <One-line statement of what this example demonstrates.>
  *
- *   This program shows:
- *     - <specific behavior or pattern>
- *     - <additional behavior or pattern>
- *     - <additional behavior or pattern>
- *
- *   <Optional: detailed explanation of the educational intent and
- *    relationship to other examples in the project>
+ * Description:
+ *   <Short paragraph describing the educational intent and what is observable/measurable.>
+ *   This example focuses on <concept> and illustrates <behavior> under <conditions>.
  *
  * Key concepts:
- *   - <OpenMP directive or rule>
- *   - <Synchronization / data-sharing concept>
- *   - <Performance or behavior consideration>
- *   - <Additional concept>
+ *   - <OpenMP construct / clause semantics>
+ *   - <Data-sharing rule: shared/private/firstprivate/default(none)>
+ *   - <Synchronization / ordering / memory consistency aspect>
+ *   - <Performance consideration: scheduling, overhead, locality, false sharing, etc.>
  *
- * OpenMP features used:
- *   Directives (list only those actually used in this file):
- *     - parallel
- *     - for
- *     - simd
- *     - parallel for simd
- *     - barrier
- *     - critical
- *     - atomic
- *     - reduction
- *     - single
- *     - task
- *     - taskwait
- *     - taskgroup
- *     - depend
+ * Algorithm / workflow (high level):
+ *   1) <Initialize inputs / data>
+ *   2) <Enter OpenMP region(s) and perform parallel work>
+ *   3) <Synchronize and/or combine partial results>
+ *   4) <Report results and/or timing>
  *
- *   Runtime library (list only those actually called in this file):
- *     - omp_get_thread_num()
- *     - omp_get_num_threads()
- *     - omp_get_max_threads()
- *     - omp_get_wtime()
- *     - omp_get_schedule()
+ * OpenMP features used (list only those actually used in this file):
+ *   Directives / constructs:
+ *     - <e.g., parallel, for, simd, single, task, barrier, critical, atomic, reduction>
+ *   Runtime library calls:
+ *     - <e.g., omp_get_thread_num(), omp_get_num_threads(), omp_get_wtime(), ...>
  *
- * Compilation (GCC / Clang):
- *   gcc -O2 -Wall -Wextra -Wpedantic -g -fopenmp \
- *       omp_<topic>.c -o omp_<topic>
+ * MPI features used (list only those actually used in this file):
+ *   - None (OpenMP-only example)
  *
- *   For SIMD-intensive code:
- *   gcc -O3 -march=native -ffast-math -Wall -Wextra -Wpedantic -g -fopenmp \
- *       omp_<topic>.c -o omp_<topic>
- *   Note: -ffast-math relaxes IEEE 754 compliance and may affect numerical accuracy.
- *         Use only when approximate results are acceptable (e.g., graphics, physics simulations).
- *         For intermediate options: -fno-signed-zeros, -fno-trapping-math, or -fno-math-errno.
+ * Compilation:
+ *   GCC:
+ *     gcc -O2 -Wall -Wextra -Wpedantic -g -fopenmp omp_<topic>.c -o omp_<topic>
+ *   Clang:
+ *     clang -O2 -Wall -Wextra -Wpedantic -g -fopenmp omp_<topic>.c -o omp_<topic>
  *
  * Execution:
- *   ./omp_<topic>
+ *   ./omp_<topic> [args]
+ *   (Optional) OMP_NUM_THREADS=<N> ./omp_<topic> [args]
  *
- *   With arguments:
- *   ./omp_<topic> [N] [options]
- *
- *   Arguments:
- *     N       : <description of first argument> (default: <value>)
- *     options : <description of additional arguments> (default: <value>)
- *
- *   Optional environment variables:
- *     export OMP_NUM_THREADS=4
- *     export OMP_SCHEDULE=<type>[,chunk_size]  # Types: static, dynamic, guided, auto
- *                                               # chunk_size for static/dynamic/guided only
- *     export OMP_PROC_BIND=close               # Valid: true, false, close, spread, master (primary in OpenMP 5.1+)
- *     export OMP_PLACES=cores
- *
- * Examples:
- *   ./omp_<topic>
- *   ./omp_<topic> 1000000
- *   OMP_NUM_THREADS=8 ./omp_<topic> 1000000 5
- *
- * Notes:
- *   - Output order is nondeterministic unless explicitly synchronized.
- *   - This example is intended for educational purposes.
- *   - <Additional note about behavior or expected output>
- *   - <Additional note about compilation or portability>
- *
- * Portability note (Windows/MinGW):
- *   - Thread affinity APIs may differ; OMP_PROC_BIND behavior varies by runtime
- *   - Use _aligned_malloc/_aligned_free for aligned memory allocation
- *   - Link against libgomp or libomp depending on compiler (GCC vs Clang)
+ * Inputs:
+ *   - Command-line arguments: <describe argv usage or "None">
+ *   - Environment variables (optional): OMP_NUM_THREADS, OMP_SCHEDULE, OMP_PROC_BIND, OMP_PLACES
  *
  * References:
- *   - OpenMP API Specification (OpenMP ARB): <specific sections or constructs>
- *   - Compiler OpenMP runtime documentation (libgomp / libomp)
- *   - <Additional references if applicable>
+ *   - OpenMP API Specification (OpenMP ARB): <relevant construct/section>
+ *   - Compiler runtime docs: GCC libgomp / LLVM libomp
  */
