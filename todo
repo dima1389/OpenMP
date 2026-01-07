@@ -1,0 +1,36 @@
+openmp-examples/
+├─ README.md
+├─ LICENSE
+├─ .gitignore
+├─ .editorconfig
+├─ .clang-format
+│
+├─ templates/
+│  └─ omp_header_template.c
+│
+├─ src/
+│  ├─ 01_basics/
+│  │  ├─ omp_hello.c
+│  │  └─ omp_data_sharing.c
+│  │
+│  ├─ 02_synchronization/
+│  │  ├─ omp_barrier.c
+│  │  └─ omp_atomic_vs_critical.c
+│  │
+│  ├─ 03_scheduling/
+│  │  └─ omp_schedule_demo.c
+│  │
+│  ├─ 04_performance/
+│  │  ├─ omp_false_sharing.c
+│  │  └─ omp_timing.c
+│  │
+│  └─ 05_advanced/
+│     ├─ omp_tasks_intro.c
+│     └─ omp_simd_intro.c
+│
+├─ scripts/
+│  └─ build_openmp.(sh|bat|ps1)
+│
+├─ bin/          (gitignored)
+└─ docs/
+   └─ methodology.md
